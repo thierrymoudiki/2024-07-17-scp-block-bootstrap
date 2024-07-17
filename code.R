@@ -47,7 +47,7 @@ mbb2 <- function(r,
 x <- diff(forecast::BoxCox(AirPassengers, 
                            lambda = "auto"))
 
-#x <- lynx
+x <- fdeaths
 
 freq_x <- frequency(x)
   
@@ -84,7 +84,7 @@ sd_scaled_calibrated_resids <- attr(scaled_calibrated_resids, "scaled:scale")
 
 # Now bootstrap the residuals and add to the mean
 B <- 100 
-b <- 15
+b <- 5
 level <- 95
 # Now bootstrap the residuals and add to the mean
 sims <- sapply(1:B, function(i) mbb2(matrix(calibrated_resids, 
@@ -134,7 +134,7 @@ matplot(as.numeric(time(sims)),
 
 # Not the correct graph 
 plot(obj_fcast2, xlab = "Time", 
-     main = "prediction intervals around the simulations")
+     main = "test set = dotted magenta \n pred. intervals for simulations = grey shade")
 lines(x_test, col='magenta', lty=2)
 lines(x_calib, col="green", lwd=2)
 # Now bootstrap the residuals and add to the mean
