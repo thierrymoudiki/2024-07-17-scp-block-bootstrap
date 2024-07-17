@@ -1,1 +1,5 @@
-Normally we use the built-in functions, such as `textInput()`, to generate the HTML UI in the R script `ui.R`. Actually **shiny** also works with a custom HTML page `www/index.html`. See [the tutorial](http://shiny.rstudio.com/tutorial/) for more details.
+# Split conformal/Block bootstrap
+
+Based on: 
+
+https://github.com/rstudio/shiny/tree/main/inst/examples-shiny/08_html
