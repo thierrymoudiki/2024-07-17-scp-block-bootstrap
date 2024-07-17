@@ -47,7 +47,7 @@ mbb2 <- function(r,
 x <- diff(forecast::BoxCox(AirPassengers, 
                            lambda = "auto"))
 
-x <- fdeaths
+x <- AirPassengers
 
 freq_x <- frequency(x)
   
