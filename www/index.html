@@ -28,6 +28,32 @@
       <label>Number of observations:</label>
       <input type="number" name="n" value="500" min="1" max="1000" />
     </p>
+    
+    <p>
+      <label>Data set:</label>
+      <select name="dataset">
+        <option value="airpassengers">AirPassengers</option>
+        <option value="fdeaths">fdeaths</option>
+        <option value="lynx">lynx</option>
+        <option value="nile">Nile</option>
+        <option value="usaccdeaths">USAccDeaths</option>
+      </select>
+    </p>
+    
+    <p>
+      <label>Transformation type:</label>
+      <select name="transformation">
+        <option value="none">None</option>
+        <option value="boxcox">Box-Cox</option>
+        <option value="diff">Diff</option>
+        <option value="diffboxcox">Diff+Box-Cox</option>
+      </select>
+    </p>
+    
+    <p>
+      <label>Block size:</label>
+      <input type="number" name="blocksize" value="5" min="1" max="15" />
+    </p>
 
   </div>
 

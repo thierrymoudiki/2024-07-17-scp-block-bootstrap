@@ -78,9 +78,9 @@ obj_fcast <- ahead::dynrmf(x_calib,
 #obj_fcast <- forecast::snaive(x_calib, h=length(x_test))
 
 
-scaled_calibrated_resids <- base::scale(calibrated_resids, 
-                                       center = TRUE, scale = TRUE)
-sd_scaled_calibrated_resids <- attr(scaled_calibrated_resids, "scaled:scale")
+#scaled_calibrated_resids <- base::scale(calibrated_resids, 
+#                                       center = TRUE, scale = TRUE)
+#sd_scaled_calibrated_resids <- attr(scaled_calibrated_resids, "scaled:scale")
 
 # Now bootstrap the residuals and add to the mean
 B <- 100 
