@@ -160,7 +160,7 @@ plot_results <- function(obj)
 {
   par(mfrow=c(2, 2))
   
-  plot(obj$x, main="input data = black + green + blue \n calibration set = green  \n forecast on calibration set = red", 
+  plot(obj$x, main="input data = black + green + blue \n calibration set = green \n forecast on calibration set = red \n test set = blue", 
        lwd=2)
   lines(obj$x_calib, col="green", lwd=2)
   lines(obj$obj$mean, col="red", lwd=2)
@@ -175,7 +175,7 @@ plot_results <- function(obj)
           main = "calibrated residuals simulation \n (block bootstrap)")
   
   plot(obj$obj_fcast2, xlab = "Time", 
-       main = "test set = dotted magenta \n pred. intervals for simulations = grey shade")
-  lines(obj$x_test, col='magenta', lty=2)
+       main = "test set = blue \n mean forecast = light blue \n pred. intervals for simulations = grey shade")
+  lines(obj$x_test, col='blue', lwd=2)
   lines(obj$x_calib, col="green", lwd=2)
 }

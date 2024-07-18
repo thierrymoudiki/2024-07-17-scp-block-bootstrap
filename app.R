@@ -1,6 +1,8 @@
 library(shiny)
 library(ahead)
 library(memoise)
+source("./functional-code.R", echo=TRUE)
+
 
 # Define server logic for random distribution app ----
 server <- function(input, output) {
@@ -8,17 +10,20 @@ server <- function(input, output) {
   # Reactive expression to generate the requested distribution ----
   # This is called whenever the inputs change. The output functions
   # defined below then use the value computed from this expression
-  d <- reactive({
-    dist <- switch(
-      input$dist,
-      norm = rnorm,
-      unif = runif,
-      lnorm = rlnorm,
-      exp = rexp,
-      rnorm
-    )
-
-    dist(input$n)
+  dataset <- reactive({
+    input$dataset
+  })
+  
+  transformation <- reactive({
+    input$transformation
+  })
+  
+  forecastingmethod <- reactive({
+    input$forecastingmethod
+  })
+  
+  blocksize <- reactive({
+    input$blocksize
   })
 
   # Generate a plot of the data ----
@@ -27,20 +32,14 @@ server <- function(input, output) {
   # both tracked, and all expressions are called in the sequence
   # implied by the dependency graph.
   output$plot <- renderPlot({
-    dist <- input$dist
-    n <- input$n
-
-    hist(
-      d(),
-      main = paste("r", dist, "(", n, ")", sep = ""),
-      col = "#75AADB",
-      border = "white"
-    )
-  })
-
-  # Generate an HTML table view of the head of the data ----
-  output$table <- renderTable({
-    head(data.frame(x = d()))
+    obj1 <- split_dataset(dataset(), transformation())
+    obj2 <- forecast_function(obj_ts = obj1, 
+                              method = forecastingmethod(), 
+                              block_size = blocksize(),
+                              B = 250, 
+                              level = 95, 
+                              seed=123)
+    plot_results(obj2)
   })
 }
 

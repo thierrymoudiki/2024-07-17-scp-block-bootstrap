@@ -15,21 +15,6 @@
   <div class="left-align">
     
     <p>
-      <label>Distribution type:</label>
-      <select name="dist">
-        <option value="norm">Normal</option>
-        <option value="unif">Uniform</option>
-        <option value="lnorm">Log-normal</option>
-        <option value="exp">Exponential</option>
-      </select>
-    </p>
-
-    <p>
-      <label>Number of observations:</label>
-      <input type="number" name="n" value="500" min="1" max="1000" />
-    </p>
-    
-    <p>
       <label>Data set:</label>
       <select name="dataset">
         <option value="airpassengers">AirPassengers</option>
@@ -45,8 +30,16 @@
       <select name="transformation">
         <option value="none">None</option>
         <option value="boxcox">Box-Cox</option>
-        <option value="diff">Diff</option>
-        <option value="diffboxcox">Diff+Box-Cox</option>
+        <option value="diff">1st order diff</option>
+        <option value="diffboxcox">1st order diff+Box-Cox</option>
+      </select>
+    </p>
+    
+    <p>
+      <label>Forecasting method:</label>
+      <select name="forecastingmethod">
+        <option value="dynrm">dynrm</option>
+        <option value="snaive">Seasonal naive</option>
       </select>
     </p>
     
