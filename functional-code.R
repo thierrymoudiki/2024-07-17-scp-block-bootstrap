@@ -2,32 +2,30 @@
 # 1 - packages -----------------------------------------------------------
 
 #list of packages required
-list_of_packages <- c("shiny", "ahead", "memoise", "RColorBrewer")
+list_of_packages <- c("remotes", "renv", "shiny", "forecast",
+                      "ahead", "memoise", "RColorBrewer")
 
 #checking missing packages from list
 new_packages <- list_of_packages[!(list_of_packages %in% utils::installed.packages()[,"Package"])]
 
 #install missing ones
+options(repos = c("MyRepo"='https://techtonique.r-universe.dev', 
+                  "CRAN"="https://cran.rstudio.com"))
 if(length(new_packages)) 
 {
   for (pkg in new_packages)
   {
     if (identical(pkg, "ahead"))
     {
-      utils::install.packages(pkg, 
-                              repos = c('https://techtonique.r-universe.dev', 
-                                        'https://cloud.r-project.org'), 
-                              dependencies = TRUE)
+      install.packages("ahead", 
+                       repos = c("https://techtonique.r-universe.dev", "https://cloud.r-project.org"))
     } else {
-      utils::install.packages(pkg, 
-                              repos = "https://cran.rstudio.com/",
-                              dependencies = TRUE)
+      utils::install.packages(pkg, dependencies = TRUE) 
     }
   }
 }
 
 library(shiny)
-library(ahead)
 library(memoise)
 
 # 2 - functions -----------------------------------------------------------

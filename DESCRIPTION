@@ -1,6 +1,6 @@
-Title: Custom HTML UI
-Author: RStudio, Inc.
-AuthorUrl: http://www.rstudio.com/
+Title: Sequential split conformal prediction + Block bootstrap
+Author: T. Moudiki (Techtonique, LLC).
+AuthorUrl: https://thierrymoudiki.github.io
 License: MIT
 Tags: getting-started
 Type: Shiny
