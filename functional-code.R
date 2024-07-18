@@ -194,7 +194,7 @@ plot_results <- function(obj)
 {
   par(mfrow=c(2, 2))
   
-  plot(obj$x, main="input data = black + green + blue \n calibration set = green \n forecast on calibration set = red \n test set = blue", 
+  plot(obj$x, main="input data = black + green + blue \n calibration set = green \n forecast on calibration set = red", 
        lwd=2)
   lines(obj$x_calib, col="green", lwd=2)
   lines(obj$obj$mean, col="red", lwd=2)
@@ -215,7 +215,7 @@ plot_results <- function(obj)
        xlim=c(min(time_sims), max(time_sims)), 
        ylim=c(min(obj$sims), max(obj$sims)),
        xlab="Time", ylab="Value", 
-       main="calibrated residuals simulations (100) \n (block bootstrap)")
+       main="calibrated residuals simulations (100) \n (moving block bootstrap)")
   for (i in 1:ncol(obj$sims)) {
     lines(time_sims, obj$sims[,i], col=custom_palette[i], lty=2, lwd=2)
   }

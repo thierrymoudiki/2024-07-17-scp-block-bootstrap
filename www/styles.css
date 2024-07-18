@@ -1,10 +1,10 @@
 body {
   background-color: #121212;
   color: #ffffff;
-  font-family: 'EB Garamond', serif;
+  font-family: 'Crimson Text', serif;
 }
 
-h1, h3 {
+h1, h3, h2 {
   text-align: left;
   margin-left: 20px;
 }
@@ -17,12 +17,13 @@ h1 {
   position: absolute;
   left: 20px;
   top: 60px;
+  width: 300px; /* Increased width */
 }
 
 .center-align {
   text-align: center;
   margin: 0 auto;
-  width: 60%;
+  padding-left: 320px; /* Adjusted to ensure no overlap */
 }
 
 label {
@@ -51,4 +52,15 @@ pre {
 #plot {
   background-color: #1e1e1e;
   border-radius: 5px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 0; /* Zero left padding */
+  margin-left: 0; /* Zero left margin */
+  line-height: 1.5em;
+}
+
+p h2 {
+  margin-top: 0;
 }
