@@ -1,4 +1,36 @@
-# 0 - functions -----------------------------------------------------------
+
+# 1 - packages -----------------------------------------------------------
+
+#list of packages required
+list_of_packages <- c("shiny", "ahead", "memoise", "RColorBrewer")
+
+#checking missing packages from list
+new_packages <- list_of_packages[!(list_of_packages %in% utils::installed.packages()[,"Package"])]
+
+#install missing ones
+if(length(new_packages)) 
+{
+  for (pkg in new_packages)
+  {
+    if (identical(pkg, "ahead"))
+    {
+      utils::install.packages(pkg, 
+                              repos = c('https://techtonique.r-universe.dev', 
+                                        'https://cloud.r-project.org'), 
+                              dependencies = TRUE)
+    } else {
+      utils::install.packages(pkg, 
+                              repos = "https://cran.rstudio.com/",
+                              dependencies = TRUE)
+    }
+  }
+}
+
+library(shiny)
+library(ahead)
+library(memoise)
+
+# 2 - functions -----------------------------------------------------------
 
 # moving block bootstrap
 mbb2 <- function(r,
@@ -44,6 +76,7 @@ split_dataset <- function(dataset=c("airpassengers",
                                     "fdeaths",
                                     "lynx",
                                     "nile",
+                                    "ukgas",
                                     "usaccdeaths"),
                           transformation=c("none", 
                                            "boxcox",
@@ -57,6 +90,7 @@ split_dataset <- function(dataset=c("airpassengers",
               fdeaths = datasets::fdeaths,
               lynx = datasets::lynx,
               nile = datasets::Nile,
+              ukgas = datasets::UKgas,
               usaccdeaths = datasets::USAccDeaths)
   if (identical(transformation, "boxcox"))
   {
@@ -170,12 +204,25 @@ plot_results <- function(obj)
        col="orange", lwd=2)
   abline(h = 0, lty=2)
   
-  matplot(as.numeric(time(obj$sims)), 
-          obj$sims, type='l', xlab = "Time", 
-          main = "calibrated residuals simulation \n (block bootstrap)")
+  # matplot(as.numeric(time(obj$sims)), 
+  #         obj$sims, type='l', xlab = "Time", 
+  #         main = "calibrated residuals simulations (100) \n (block bootstrap)")
+  time_sims <- as.numeric(time(obj$sims))
+  #vivid_colors <- RColorBrewer::brewer.pal(8, "Set1")
+  custom_palette <- c("red", "magenta", "yellow", "orange", "black", "green", "blue")
+  custom_palette <- colorRampPalette(custom_palette)(ncol(obj$sims))
+  plot(1, type="n", 
+       xlim=c(min(time_sims), max(time_sims)), 
+       ylim=c(min(obj$sims), max(obj$sims)),
+       xlab="Time", ylab="Value", 
+       main="calibrated residuals simulations (100) \n (block bootstrap)")
+  for (i in 1:ncol(obj$sims)) {
+    lines(time_sims, obj$sims[,i], col=custom_palette[i], lty=2, lwd=2)
+  }
   
   plot(obj$obj_fcast2, xlab = "Time", 
-       main = "test set = blue \n mean forecast = light blue \n pred. intervals for simulations = grey shade")
+       main = "test set = blue \n mean forecast = light blue \n 95% pred. intervals for simulations = grey shade")
   lines(obj$x_test, col='blue', lwd=2)
   lines(obj$x_calib, col="green", lwd=2)
 }
+

@@ -1,8 +1,4 @@
-library(shiny)
-library(ahead)
-library(memoise)
 source("./functional-code.R", echo=TRUE)
-
 
 # Define server logic for random distribution app ----
 server <- function(input, output) {
@@ -10,19 +6,19 @@ server <- function(input, output) {
   # Reactive expression to generate the requested distribution ----
   # This is called whenever the inputs change. The output functions
   # defined below then use the value computed from this expression
-  dataset <- reactive({
+  dataset <- shiny::reactive({
     input$dataset
   })
   
-  transformation <- reactive({
+  transformation <- shiny::reactive({
     input$transformation
   })
   
-  forecastingmethod <- reactive({
+  forecastingmethod <- shiny::reactive({
     input$forecastingmethod
   })
   
-  blocksize <- reactive({
+  blocksize <- shiny::reactive({
     input$blocksize
   })
 
@@ -31,12 +27,12 @@ server <- function(input, output) {
   # dependencies on the inputs and the data reactive expression are
   # both tracked, and all expressions are called in the sequence
   # implied by the dependency graph.
-  output$plot <- renderPlot({
+  output$plot <- shiny::renderPlot({
     obj1 <- split_dataset(dataset(), transformation())
     obj2 <- forecast_function(obj_ts = obj1, 
                               method = forecastingmethod(), 
                               block_size = blocksize(),
-                              B = 250, 
+                              B = 100, 
                               level = 95, 
                               seed=123)
     plot_results(obj2)
@@ -44,4 +40,4 @@ server <- function(input, output) {
 }
 
 # Create Shiny app ----
-shinyApp(ui = htmlTemplate("www/index.html"), server)
+shiny::shinyApp(ui = shiny::htmlTemplate("www/index.html"), server)

@@ -10,7 +10,7 @@
 
 <body>
 
-  <h1>Split conformal/Block bootstrap</h1>
+  <h1>Sequential split conformal prediction + Block bootstrap</h1>
 
   <div class="left-align">
     
@@ -20,13 +20,13 @@
         <option value="airpassengers">AirPassengers</option>
         <option value="fdeaths">fdeaths</option>
         <option value="lynx">lynx</option>
-        <option value="nile">Nile</option>
+        <option value="ukgas">UKgas</option>
         <option value="usaccdeaths">USAccDeaths</option>
       </select>
     </p>
     
     <p>
-      <label>Transformation type:</label>
+      <label>Transformation:</label>
       <select name="transformation">
         <option value="none">None</option>
         <option value="boxcox">Box-Cox</option>
@@ -44,15 +44,27 @@
     </p>
     
     <p>
-      <label>Block size:</label>
+      <label>Block size (for bootstrap):</label>
       <input type="number" name="blocksize" value="5" min="1" max="15" />
+    </p>
+    
+    <p>
+      <h2>How it works:</h2>
+      <ul>
+        <li>Split the data set into training, calibration and test set</li>
+        <li>Obtain point forecast on calibration set</li>
+        <li>Obtain calibrated residuals</li>
+        <li>Simulate calibrated residuals using moving block bootstrap</li>
+        <li>Obtain point forecast on test set</li>
+        <li>Add calibrated residuals simulations to point forecast on test set</li>
+      </ul>
     </p>
 
   </div>
 
   <div class="center-align">
     <h3>Plot of data:</h3>
-    <div id="plot" class="shiny-plot-output" style="width: 100%; height: 550px; width: 900px"></div>
+    <div id="plot" class="shiny-plot-output" style="width: 100%; height: 560px; width: 900px"></div>
   </div>
 
 </body>
