@@ -38,10 +38,9 @@ mbb2 <- function(r,
   }
 }
 mbb2 <- memoise::memoise(mbb2)
-  
+
 # split data set 
-split_dataset <- function(x, 
-                          dataset=c("airpassengers",
+split_dataset <- function(dataset=c("airpassengers",
                                     "fdeaths",
                                     "lynx",
                                     "nile",
@@ -59,12 +58,25 @@ split_dataset <- function(x,
               lynx = datasets::lynx,
               nile = datasets::Nile,
               usaccdeaths = datasets::USAccDeaths)
+  if (identical(transformation, "boxcox"))
+  {
+    x <- forecast::BoxCox(x, lambda = "auto")
+  }
+  if (identical(transformation, "diff"))
+  {
+    x <- diff(x)
+  }
+  if (identical(transformation, "diffboxcox"))
+  {
+    x <- diff(forecast::BoxCox(x, lambda = "auto"))
+  }
+  
   freq_x <- frequency(x)
   n <- floor(0.9*length(x))
   x_train <- ts(x[1:floor(n/2)], 
                 start=start(x), 
                 frequency = freq_x)
-  x_train <- ts(x[(floor(n/2) + 1):n], 
+  x_calib <- ts(x[(floor(n/2) + 1):n], 
                 start=tsp(x_train)[2] + 1 / freq_x, 
                 frequency = freq_x)
   x_test <- ts(x[(n + 1):length(x)], 
@@ -72,45 +84,48 @@ split_dataset <- function(x,
                frequency = freq_x)
   res <- list()
   res$x <- x
-  res$train <- x_train
-  res$calib <- x_train
-  res$test <- x_test
+  res$x_train <- x_train
+  res$x_calib <- x_calib
+  res$x_test <- x_test
   return(res)
 }
+split_dataset <- memoise::memoise(split_dataset)
 
 # forecasting function 
-forecast_function <- function(x, x_train, x_calib, x_test, 
+forecast_function <- function(obj_ts,
                               method = c("dynrm", 
                                          "theta", 
                                          "snaive"), 
                               block_size = 5, 
-                              B = 100, 
+                              B = 250, 
                               level = 95, 
                               seed=123)
 {
   method <- match.arg(method)
-  freq_x <- frequency(x)
+  freq_x <- frequency(obj_ts$x)
   fcast_func <- switch(method, 
-                       dyrm = ahead::dynrmf,
+                       dynrm = ahead::dynrmf,
                        theta = forecast::thetaf,
                        snaive = forecast::snaive)
-  res <- list()
-  obj <- fcast_func(x_train, h=length(x_calib)) # train on training set 
-  calibrated_resids <- obj$mean - x_calib # obtain calibrated residuals
-  obj_fcast <- fcast_func(x_calib, h=length(x_test)) # train on calibration set 
+  
+  obj <- fcast_func(obj_ts$x_train, 
+                    h=length(obj_ts$x_calib)) # train on training set predict on calibration set
+  calibrated_resids <- obj_ts$x_calib - obj$mean # obtain calibrated residuals
+  obj_fcast <- fcast_func(obj_ts$x_calib, 
+                          h=length(obj_ts$x_test)) # train on calibration set 
   
   sims <- ts(sapply(1:B, function(i) mbb2(matrix(calibrated_resids, 
-                                              ncol = 1), 
-                                       n=length(x_test), 
-                                       b=block_size, 
-                                       seed=i+seed*100)),
-             start = start(x_test), 
-             frequency = frequency(x_test))
-             
+                                                 ncol = 1), 
+                                          n=length(obj_ts$x_test), 
+                                          b=block_size, 
+                                          seed=i+seed*100)),
+             start = start(obj_ts$x_test), 
+             frequency = frequency(obj_ts$x_test))
+  
   preds <- obj_fcast$mean + sims
   obj_fcast2 <- list()
   obj_fcast2$level <- level 
-  obj_fcast2$x <- x_calib
+  obj_fcast2$x <- obj_ts$x_calib
   start_preds <- start(obj_fcast$mean)
   obj_fcast2$mean <- ts(rowMeans(preds), 
                         start = start_preds, 
@@ -125,10 +140,11 @@ forecast_function <- function(x, x_train, x_calib, x_test,
     frequency = freq_x)
   class(obj_fcast2) <- "forecast"
   
-  res$x <- x 
-  res$x_train <- x_train 
-  res$x_calib <- x_calib
-  res$x_test <- x_test
+  res <- list()
+  res$x <- obj_ts$x 
+  res$x_train <- obj_ts$x_train 
+  res$x_calib <- obj_ts$x_calib
+  res$x_test <- obj_ts$x_test
   res$obj <- obj 
   res$calibrated_resids <- calibrated_resids
   res$obj_fcast2 <- obj_fcast2
@@ -136,6 +152,7 @@ forecast_function <- function(x, x_train, x_calib, x_test,
   
   return(res)
 }
+forecast_function <- memoise::memoise(forecast_function)
 
 
 # plot results 
