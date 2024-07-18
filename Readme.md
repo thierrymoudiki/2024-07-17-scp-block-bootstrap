@@ -10,6 +10,8 @@ In R Console, run:
 shiny::runGitHub(repo = "2024-07-17-scp-block-bootstrap", username = "thierrymoudiki")
 ```
 
+Click on "Open In the browser". That's it. 
+
 ## How it looks like
 
 ![xxx](./img.png)
