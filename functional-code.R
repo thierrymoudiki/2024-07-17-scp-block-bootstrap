@@ -192,13 +192,15 @@ plot_results <- function(obj)
 {
   par(mfrow=c(2, 2))
   
-  plot(obj$x, main="input data = black + green + blue \n calibration set = green \n forecast on calibration set = red", 
-       lwd=2)
+  plot(obj$x, ylab="Value", 
+       main="input data = black + green + blue \n calibration set = green \n forecast on calibration set = red", 
+       lwd=2, col="black")
   lines(obj$x_calib, col="green", lwd=2)
   lines(obj$obj$mean, col="red", lwd=2)
   lines(obj$x_test, col="blue", lwd=2)
   
-  plot(obj$calibrated_resids, main="calibrated residuals \n = green - red = orange",
+  plot(obj$calibrated_resids, ylab="Value", 
+       main="calibrated residuals \n = green - red = orange",
        col="orange", lwd=2)
   abline(h = 0, lty=2)
   
@@ -218,7 +220,7 @@ plot_results <- function(obj)
     lines(time_sims, obj$sims[,i], col=custom_palette[i], lty=2, lwd=2)
   }
   
-  plot(obj$obj_fcast2, xlab = "Time", 
+  plot(obj$obj_fcast2, xlab = "Time", ylab="Value", 
        main = "test set = blue \n mean forecast = light blue \n 95% pred. intervals for simulations = grey shade")
   lines(obj$x_test, col='blue', lwd=2)
   lines(obj$x_calib, col="green", lwd=2)
