@@ -27,6 +27,7 @@ Click on "Open In the browser". That's it.
 - Prediction = Calibrated residuals simulations + point forecast on test set
 
 ## See also 
-
 - https://thierrymoudiki.github.io/blog/2024/07/03/python/quasirandomizednn/forecasting/nnetsauce-mts-isf2024
+- https://www.researchgate.net/publication/382589729_Probabilistic_Forecasting_with_nnetsauce_using_Density_Estimation_Bayesian_inference_Conformal_prediction_and_Vine_copulas
+
 - https://www.researchgate.net/publication/379643443_Conformalized_predictive_simulations_for_univariate_time_series
